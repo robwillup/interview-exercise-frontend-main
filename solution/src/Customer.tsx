@@ -1,11 +1,10 @@
 import {
-    HStack,
+  HStack,
   Popover,
   PopoverArrow,
   PopoverBody,
   PopoverCloseButton,
   PopoverContent,
-  PopoverHeader,
   PopoverTrigger,
   Text,
 } from "@chakra-ui/react";
@@ -21,9 +20,9 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ customer }) => {
     <Popover placement="left">
       <PopoverTrigger>
         <span>
-        <HStack>
-          <GoInfo size={25}/>
-          <Text>{customer.name}</Text>
+          <HStack>
+            <GoInfo size={25} />
+            <Text>{customer.name}</Text>
           </HStack>
         </span>
       </PopoverTrigger>

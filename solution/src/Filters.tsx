@@ -10,7 +10,6 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  Text,
   Stack,
 } from "@chakra-ui/react";
 import { Filter, PaymentMethod, Status } from "./Types";
@@ -28,7 +27,6 @@ const Filters: React.FC<FiltersProps> = ({ handleFilterChange, filter }) => {
   const [currency, setCurrency] = useState("");
   const [userName, setUserName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
-  const [startDate, setStartDate] = useState();
 
   const handleStatusCheckBoxChange = (status: Status) => {
     const updatedFilter = {

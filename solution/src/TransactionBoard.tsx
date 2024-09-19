@@ -12,7 +12,12 @@ import {
 } from "@chakra-ui/react";
 import Purchases from "./Purchases";
 import Filters from "./Filters";
-import { RxDoubleArrowLeft, RxDoubleArrowRight, RxChevronLeft, RxChevronRight } from "react-icons/rx";
+import {
+  RxDoubleArrowLeft,
+  RxDoubleArrowRight,
+  RxChevronLeft,
+  RxChevronRight,
+} from "react-icons/rx";
 
 const mapJsonToTransaction = (data: any): Transaction => {
   return {
@@ -178,7 +183,7 @@ const TransactionBoard: React.FC = () => {
   };
 
   return (
-    <Box display="flex" justifyContent="center" p={4} >
+    <Box display="flex" justifyContent="center" p={4}>
       <Card
         p="10"
         h="90vh"
@@ -214,7 +219,8 @@ const TransactionBoard: React.FC = () => {
               colorScheme="blue"
               w={100}
             >
-              <RxDoubleArrowLeft /><Text pl={2}>First</Text>
+              <RxDoubleArrowLeft />
+              <Text pl={2}>First</Text>
             </Button>
             <Button
               size="sm"
@@ -224,7 +230,8 @@ const TransactionBoard: React.FC = () => {
               colorScheme={page === 0 ? "" : "blue"}
               w={100}
             >
-              <RxChevronLeft /><Text >Previous</Text>
+              <RxChevronLeft />
+              <Text>Previous</Text>
             </Button>
             <Button
               size="sm"
@@ -234,7 +241,8 @@ const TransactionBoard: React.FC = () => {
               disabled={page === lastPage}
               variant={page === lastPage ? "outline" : "solid"}
             >
-              <Text>Next</Text><RxChevronRight />
+              <Text>Next</Text>
+              <RxChevronRight />
             </Button>
             <Button
               size="sm"
@@ -242,7 +250,8 @@ const TransactionBoard: React.FC = () => {
               colorScheme="blue"
               w={100}
             >
-              <Text pr={2}>Last</Text><RxDoubleArrowRight />
+              <Text pr={2}>Last</Text>
+              <RxDoubleArrowRight />
             </Button>
           </Stack>
         </Box>
