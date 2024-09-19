@@ -1,8 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
 import { Filter, PaymentMethod, Status, Transaction } from "./Types";
-import { Badge, Box, Button, Card, FormControl, Stack } from "@chakra-ui/react";
+import {
+  AbsoluteCenter,
+  Box,
+  Button,
+  Card,
+  Divider,
+  FormControl,
+  Text,
+  Stack,
+} from "@chakra-ui/react";
 import Purchases from "./Purchases";
 import Filters from "./Filters";
+import { RxDoubleArrowLeft, RxDoubleArrowRight, RxChevronLeft, RxChevronRight } from "react-icons/rx";
 
 const mapJsonToTransaction = (data: any): Transaction => {
   return {
@@ -34,9 +44,12 @@ const filterTransactions = (
   return transactions.filter((transaction) => {
     let statusMatches = true;
     let paymentMethodMatches = true;
+    let currencyMatches = true;
+    let nameMatches = true;
+    let emailMatches = true;
 
     if (filter.statusCompleted || filter.statusPending || filter.statusFailed) {
-      statusMatches = false; // Start by assuming no match
+      statusMatches = false;
 
       if (filter.statusCompleted && transaction.status === Status.Completed) {
         statusMatches = true;
@@ -49,7 +62,6 @@ const filterTransactions = (
       }
     }
 
-    // Check if any payment method filters are applied
     if (
       filter.creditCard ||
       filter.bankTransfer ||
@@ -57,7 +69,7 @@ const filterTransactions = (
       filter.pix ||
       filter.cash
     ) {
-      paymentMethodMatches = false; // Start by assuming no match
+      paymentMethodMatches = false;
 
       if (
         filter.creditCard &&
@@ -82,8 +94,37 @@ const filterTransactions = (
       }
     }
 
-    // If no filters are applied, return all transactions
-    return statusMatches && paymentMethodMatches;
+    if (filter.currency) {
+      currencyMatches = false;
+
+      if (transaction.currency.includes(filter.currency)) {
+        currencyMatches = true;
+      }
+    }
+
+    if (filter.userName) {
+      nameMatches = false;
+
+      if (transaction.customer.name.includes(filter.userName)) {
+        nameMatches = true;
+      }
+    }
+
+    if (filter.emailAddress) {
+      emailMatches = false;
+
+      if (transaction.customer.email.includes(filter.emailAddress)) {
+        emailMatches = true;
+      }
+    }
+
+    return (
+      statusMatches &&
+      paymentMethodMatches &&
+      currencyMatches &&
+      nameMatches &&
+      emailMatches
+    );
   });
 };
 
@@ -137,49 +178,76 @@ const TransactionBoard: React.FC = () => {
   };
 
   return (
-    <Card p="10" maxHeight="90vh" display="flex" flexDirection="column">
-      <FormControl>
-        <Filters
-          handleFilterChange={handleFilterChange}
-          filter={filter}
-        ></Filters>
-      </FormControl>
-      <Badge width={200}>{totalTransactions} transactions</Badge>
-      <Purchases purchases={transactions}></Purchases>
-      <Box pt={5} display="flex" justifyContent="center">
-        <Stack direction="row" spacing={10} align="center">
-          <Button
-            onClick={() => setPage(0)}
-            disabled={page === 0}
-            colorScheme="blue"
-            w={100}
-          >
-            First Page
-          </Button>
-          <Button
-            onClick={() => setPage(page === 0 ? 0 : page - 1)}
-            disabled={page === 0}
-            variant={page === 0 ? "outline" : "solid"}
-            colorScheme="blue"
-            w={100}
-          >
-            Previous
-          </Button>
-          <Button
-            onClick={() => setPage(page === lastPage ? lastPage : page + 1)}
-            colorScheme={page === lastPage ? "" : "blue"}
-            w={100}
-            disabled={page === lastPage}
-            variant={page === lastPage ? "outline" : "solid"}
-          >
-            Next
-          </Button>
-          <Button onClick={() => setPage(lastPage)} colorScheme="blue" w={100}>
-            Last Page
-          </Button>
-        </Stack>
-      </Box>
-    </Card>
+    <Box display="flex" justifyContent="center" p={4} >
+      <Card
+        p="10"
+        h="90vh"
+        display="flex"
+        flexDirection="column"
+        overflow="hidden"
+        w="80vw"
+      >
+        <FormControl>
+          <Filters
+            handleFilterChange={handleFilterChange}
+            filter={filter}
+          ></Filters>
+        </FormControl>
+        <Box position="relative" padding="10">
+          <Divider />
+          <AbsoluteCenter bg="white" px="4">
+            Transactions
+          </AbsoluteCenter>
+        </Box>
+        <Box flex="1" overflowY="auto">
+          <Purchases
+            purchases={transactions}
+            total={totalTransactions}
+          ></Purchases>
+        </Box>
+        <Box pt={5} display="flex" justifyContent="center">
+          <Stack direction="row" spacing={10} align="center">
+            <Button
+              size="sm"
+              onClick={() => setPage(0)}
+              disabled={page === 0}
+              colorScheme="blue"
+              w={100}
+            >
+              <RxDoubleArrowLeft /><Text pl={2}>First</Text>
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => setPage(page === 0 ? 0 : page - 1)}
+              disabled={page === 0}
+              variant={page === 0 ? "outline" : "solid"}
+              colorScheme={page === 0 ? "" : "blue"}
+              w={100}
+            >
+              <RxChevronLeft /><Text >Previous</Text>
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => setPage(page === lastPage ? lastPage : page + 1)}
+              colorScheme={page === lastPage ? "" : "blue"}
+              w={100}
+              disabled={page === lastPage}
+              variant={page === lastPage ? "outline" : "solid"}
+            >
+              <Text>Next</Text><RxChevronRight />
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => setPage(lastPage)}
+              colorScheme="blue"
+              w={100}
+            >
+              <Text pr={2}>Last</Text><RxDoubleArrowRight />
+            </Button>
+          </Stack>
+        </Box>
+      </Card>
+    </Box>
   );
 };
 

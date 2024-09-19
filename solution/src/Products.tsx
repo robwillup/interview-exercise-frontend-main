@@ -1,26 +1,29 @@
-import {
-  Table,
-  TableContainer,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
-import ProductCard from "./ProductRow";
-import { ProductsProps } from "./ProductContainer";
+import { Table, TableContainer, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Product } from "./Types";
 
-const Products: React.FC<ProductsProps> = ({ products }) => {
+export interface ProductsProps {
+  products: Product[];
+  currency: string;
+}
+
+const Products: React.FC<ProductsProps> = ({ products, currency }) => {
   return (
     <TableContainer>
-      <Table variant="simple">
+      <Table variant="striped">
         <Thead>
           <Tr>
-            <Th>Name</Th>
+            <Th>Product</Th>
             <Th>Category</Th>
             <Th isNumeric>Quantity</Th>
-            <Th isNumeric>Price</Th>
+            <Th>Price</Th>
           </Tr>
           {products.map((product, id) => (
-            <ProductCard key={id} product={product}></ProductCard>
+            <Tr key={id} fontSize={14}>
+              <Td>{product.name}</Td>
+              <Td>{product.category}</Td>
+              <Td isNumeric>{product.quantity}</Td>
+              <Td>{currency} {product.price}</Td>
+            </Tr>
           ))}
         </Thead>
       </Table>

@@ -32,6 +32,9 @@ export interface Filter {
     payPal?: boolean;
     pix?: boolean;
     cash?: boolean;
+    currency?: string;
+    userName?: string;
+    emailAddress?: string;
 }
 
 export enum Status {
