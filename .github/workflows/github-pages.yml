@@ -21,10 +21,11 @@ jobs:
           node-version: '16.x'
       - run: npm install
       - run: npm run build
-      # - name: Configure Git
-      #   run: |
-      #     git remote add origin https://github.com/robwillup/interview-exercise-frontend-main.git
-      #     git config --global user.name "Rob Will"
-      #     git config --global user.email "robwillup@outlook.com"
+      - name: Configure Git
+        run: |
+          git remote remove origin
+          git remote add origin https://github.com/robwillup/interview-exercise-frontend-main.git
+          git config --global user.name "Rob Will"
+          git config --global user.email "robwillup@outlook.com"
       - name: Deploy to GitHub Pages
         run: npm run deploy
