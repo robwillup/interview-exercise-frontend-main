@@ -34,7 +34,7 @@ jobs:
           ###### Repository/Build Configurations ######
           app_location: "/solution" # App source code path
           api_location: "" # Api source code path - optional
-          output_location: "solution/build" # Built app content directory - where the production build is output
+          output_location: "build" # Built app content directory (defaults to 'build')
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
