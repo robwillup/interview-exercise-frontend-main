@@ -146,7 +146,6 @@ const TransactionBoard: React.FC = () => {
       try {
         const response = await fetch("transactions.json");
         const json = await response.json();
-
         const mappedTransactions = json.map(mapJsonToTransaction);
         const filteredTransactions = filterTransactions(
           mappedTransactions,
@@ -157,7 +156,6 @@ const TransactionBoard: React.FC = () => {
 
         return filteredTransactions.slice(startIndex, startIndex + count);
       } catch (error) {
-        console.error("Error fetching transactions:", error);
         return [];
       }
     },
@@ -185,12 +183,12 @@ const TransactionBoard: React.FC = () => {
   return (
     <Box display="flex" justifyContent="center" p={4}>
       <Card
-        p="10"
-        h="90vh"
+        p={{ base: "5", md: "10" }}
+        h={{ base: "auto", md: "90vh" }}
         display="flex"
         flexDirection="column"
         overflow="hidden"
-        w="80vw"
+        w={{ base: "90vw", md: "80vw" }}
       >
         <FormControl>
           <Filters
@@ -198,7 +196,7 @@ const TransactionBoard: React.FC = () => {
             filter={filter}
           ></Filters>
         </FormControl>
-        <Box position="relative" padding="10">
+        <Box position="relative" padding={{ base: "5", md: "10" }}>
           <Divider />
           <AbsoluteCenter bg="white" px="4">
             Transactions
@@ -211,7 +209,7 @@ const TransactionBoard: React.FC = () => {
           ></Purchases>
         </Box>
         <Box pt={5} display="flex" justifyContent="center">
-          <Stack direction="row" spacing={10} align="center">
+          <Stack direction={{ base: "column", md: "row" }} spacing={10} align="center">
             <Button
               size="sm"
               onClick={() => setPage(0)}

@@ -1,7 +1,6 @@
 {
   "name": "solution",
   "version": "0.1.0",
-  "homepage": "https://robwillup.github.io/interview-exercise-frontend-main",
   "private": true,
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",

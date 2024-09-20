@@ -10,6 +10,7 @@ import {
   Thead,
   Tooltip,
   Tr,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { PaymentMethod, Transaction } from "./Types";
 import Products from "./Products";
@@ -28,6 +29,8 @@ interface PurchasesProps {
 const Purchases: React.FC<PurchasesProps> = ({ purchases, total }) => {
   const [openRow, setOpenRow] = useState<number | null>(null);
 
+  const isMobile = useBreakpointValue({ base: true, md: false });
+
   const badgeColorMap = {
     Completed: "green.50",
     Pending: "orange.50",
@@ -40,7 +43,7 @@ const Purchases: React.FC<PurchasesProps> = ({ purchases, total }) => {
 
   return (
     <TableContainer>
-      <Table>
+      <Table size={isMobile ? "sm" : "md"}>
         <TableCaption>Total Transactions: {total}</TableCaption>
         <Thead>
           <Tr>
@@ -50,7 +53,7 @@ const Purchases: React.FC<PurchasesProps> = ({ purchases, total }) => {
             <Th>Customer</Th>
           </Tr>
         </Thead>
-        <Tbody fontSize={16}>
+        <Tbody fontSize={isMobile ? "14px" : "16px"}>
           {purchases.map((purchase, id) => (
             <React.Fragment key={id}>
               <Tr
@@ -141,7 +144,7 @@ const Purchases: React.FC<PurchasesProps> = ({ purchases, total }) => {
               </Tr>
               {openRow === id && (
                 <Tr>
-                  <Td colSpan={5}>
+                  <Td colSpan={isMobile ? 2: 4}>
                     <Box>
                       <Products
                         products={purchase.products}
