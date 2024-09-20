@@ -9,6 +9,7 @@ import {
   FormControl,
   Text,
   Stack,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import Purchases from "./Purchases";
 import Filters from "./Filters";
@@ -141,6 +142,8 @@ const TransactionBoard: React.FC = () => {
 
   const itemsPerPage = 5;
 
+  const isMobile = useBreakpointValue({ base: true, md: false });
+
   const getTransactions = useCallback(
     async (startIndex: number, count: number) => {
       try {
@@ -183,12 +186,12 @@ const TransactionBoard: React.FC = () => {
   return (
     <Box display="flex" justifyContent="center" p={4}>
       <Card
-        p={{ base: "5", md: "10" }}
-        h={{ base: "auto", md: "90vh" }}
+        p={ isMobile ? "5" : "10" }
+        h="90vh"
         display="flex"
         flexDirection="column"
         overflow="hidden"
-        w={{ base: "90vw", md: "80vw" }}
+        w={ isMobile ? "100vw" : "80vw" }
       >
         <FormControl>
           <Filters
@@ -196,59 +199,58 @@ const TransactionBoard: React.FC = () => {
             filter={filter}
           ></Filters>
         </FormControl>
-        <Box position="relative" padding={{ base: "5", md: "10" }}>
+        <Box position="relative" padding={isMobile ? "5" : "10"}>
           <Divider />
           <AbsoluteCenter bg="white" px="4">
-            Transactions
+            {totalTransactions} Transactions
           </AbsoluteCenter>
         </Box>
         <Box flex="1" overflowY="auto">
           <Purchases
             purchases={transactions}
-            total={totalTransactions}
           ></Purchases>
         </Box>
-        <Box pt={5} display="flex" justifyContent="center">
-          <Stack direction={{ base: "column", md: "row" }} spacing={10} align="center">
+        <Box display="flex" justifyContent="center">
+          <Stack direction="row" spacing={isMobile ? 2 : 10} align="center">
             <Button
-              size="sm"
+              size={isMobile ? "xs" : "sm"}
               onClick={() => setPage(0)}
               disabled={page === 0}
               colorScheme="blue"
-              w={100}
+              w={isMobile ? 50 : 100}
             >
               <RxDoubleArrowLeft />
-              <Text pl={2}>First</Text>
+              {!isMobile && <Text pl={2}>First</Text>}
             </Button>
             <Button
-              size="sm"
+              size={isMobile ? "xs" : "sm"}
               onClick={() => setPage(page === 0 ? 0 : page - 1)}
               disabled={page === 0}
               variant={page === 0 ? "outline" : "solid"}
               colorScheme={page === 0 ? "" : "blue"}
-              w={100}
+              w={isMobile ? 50 : 100}
             >
               <RxChevronLeft />
-              <Text>Previous</Text>
+              {!isMobile && <Text pl={2}>First</Text>}
             </Button>
             <Button
-              size="sm"
+              size={isMobile ? "xs" : "sm"}
               onClick={() => setPage(page === lastPage ? lastPage : page + 1)}
               colorScheme={page === lastPage ? "" : "blue"}
-              w={100}
               disabled={page === lastPage}
               variant={page === lastPage ? "outline" : "solid"}
+              w={isMobile ? 50 : 100}
             >
-              <Text>Next</Text>
+              {!isMobile && <Text pr={2}>Next</Text>}
               <RxChevronRight />
             </Button>
             <Button
-              size="sm"
+              size={isMobile ? "xs" : "sm"}
               onClick={() => setPage(lastPage)}
               colorScheme="blue"
-              w={100}
+              w={isMobile ? 50 : 100}
             >
-              <Text pr={2}>Last</Text>
+              {!isMobile && <Text pr={2}>Last</Text>}
               <RxDoubleArrowRight />
             </Button>
           </Stack>
