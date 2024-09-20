@@ -186,12 +186,12 @@ const TransactionBoard: React.FC = () => {
   return (
     <Box display="flex" justifyContent="center" p={4}>
       <Card
-        p={ isMobile ? "5" : "10" }
+        p={isMobile ? "5" : "10"}
         h="90vh"
         display="flex"
         flexDirection="column"
         overflow="hidden"
-        w={ isMobile ? "100vw" : "80vw" }
+        w={isMobile ? "100vw" : "80vw"}
       >
         <FormControl>
           <Filters
@@ -206,9 +206,7 @@ const TransactionBoard: React.FC = () => {
           </AbsoluteCenter>
         </Box>
         <Box flex="1" overflowY="auto">
-          <Purchases
-            purchases={transactions}
-          ></Purchases>
+          <Purchases purchases={transactions}></Purchases>
         </Box>
         <Box display="flex" justifyContent="center">
           <Stack direction="row" spacing={isMobile ? 2 : 10} align="center">

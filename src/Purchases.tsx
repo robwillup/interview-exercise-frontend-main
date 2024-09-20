@@ -1,26 +1,24 @@
 import {
   Box,
+  Flex,
   Stack,
   Table,
-  TableCaption,
   TableContainer,
   Tbody,
   Td,
+  Text,
   Tfoot,
   Th,
   Thead,
-  Tooltip,
   Tr,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import { PaymentMethod, Transaction } from "./Types";
+import { Transaction } from "./Types";
 import Products from "./Products";
 import { useState } from "react";
 import CustomerInfo from "./Customer";
 import React from "react";
-import { RxCircleBackslash } from "react-icons/rx";
-import { BsBank2, BsCashCoin, BsCreditCard, BsPaypal } from "react-icons/bs";
-import { SiPix } from "react-icons/si";
+import PaymentMethodIcon from "./PaymentMethodIcon";
 
 interface PurchasesProps {
   purchases: Transaction[];
@@ -55,26 +53,46 @@ const Purchases: React.FC<PurchasesProps> = ({ purchases }) => {
               onClick={() => toggleRow(id)}
               _hover={{ bg: "blue.100" }}
             >
-              <Box>Date: {purchase.date.toDateString()}</Box>
-              <Box>
-                Total: {purchase.currency} {purchase.totalAmount}
-              </Box>
-              <Box>Currency: {purchase.currency}</Box>
-              <Box>
-                Payment Method:{" "}
-                {purchase.paymentMethod === PaymentMethod.Cash ? (
-                  <Tooltip label={PaymentMethod.Cash}>
-                    <span>Cash</span>
-                  </Tooltip>
-                ) : purchase.paymentMethod === PaymentMethod.CreditCard ? (
-                  <Tooltip label={PaymentMethod.CreditCard}>
-                    <span>Credit Card</span>
-                  </Tooltip>
-                ) : (
-                  "Other"
-                )}
-              </Box>
-              <Box>Customer: {purchase.customer.name}</Box>
+              <Flex justifyContent="space-between" mb={2}>
+                <Text fontWeight="bold" fontSize="md" color="gray.700">
+                  Date:
+                </Text>
+                <Text>{purchase.date.toDateString()}</Text>
+              </Flex>
+              <Flex justifyContent="space-between" mb={2}>
+                <Text fontWeight="bold" fontSize="md" color="gray.700">
+                  Total:
+                </Text>
+                <Text>
+                  {purchase.currency} {purchase.totalAmount}
+                </Text>
+              </Flex>
+              <Flex justifyContent="space-between" mb={2}>
+                <Text fontWeight="bold" fontSize="md" color="gray.700">
+                  Payment Method:
+                </Text>
+                <PaymentMethodIcon
+                  method={purchase.paymentMethod}
+                ></PaymentMethodIcon>
+              </Flex>
+              <Flex justifyContent="space-between" mb={2}>
+                <Text fontWeight="bold" fontSize="md" color="gray.700">
+                  Customer:
+                </Text>
+                <Text>{purchase.customer.name}</Text>
+              </Flex>
+              <Flex justifyContent="space-between" mb={2}>
+                <Text fontWeight="bold" fontSize="md" color="gray.700">
+                  Email:
+                </Text>
+                <Text>{purchase.customer.email}</Text>
+              </Flex>
+              <Flex justifyContent="space-between" mb={2}>
+                <Text fontWeight="bold" fontSize="md" color="gray.700">
+                  Age:
+                </Text>
+                <Text>{purchase.customer.age}</Text>
+              </Flex>
               {openRow === id && (
                 <Box>
                   <Products
@@ -110,79 +128,15 @@ const Purchases: React.FC<PurchasesProps> = ({ purchases }) => {
                     bg={badgeColorMap[purchase.status]}
                   >
                     <Td onClick={() => toggleRow(id)}>
-                      {purchase.date.getFullYear() +
-                        "-" +
-                        purchase.date.getMonth() +
-                        "-" +
-                        purchase.date.getDay()}
+                      {purchase.date.toDateString()}
                     </Td>
                     <Td onClick={() => toggleRow(id)}>
                       {purchase.currency} {purchase.totalAmount}
                     </Td>
                     <Td onClick={() => toggleRow(id)}>
-                      {purchase.paymentMethod === PaymentMethod.Cash ? (
-                        <Tooltip
-                          label={PaymentMethod.Cash}
-                          placement="top"
-                          offset={[-60, 5]}
-                        >
-                          <span>
-                            <BsCashCoin size={25} />
-                          </span>
-                        </Tooltip>
-                      ) : purchase.paymentMethod ===
-                        PaymentMethod.BankTransfer ? (
-                        <Tooltip
-                          label={PaymentMethod.BankTransfer}
-                          placement="top"
-                          offset={[-60, 5]}
-                        >
-                          <span>
-                            <BsBank2 size={25} />
-                          </span>
-                        </Tooltip>
-                      ) : purchase.paymentMethod ===
-                        PaymentMethod.CreditCard ? (
-                        <Tooltip
-                          label={PaymentMethod.CreditCard}
-                          placement="top"
-                          offset={[-60, 5]}
-                        >
-                          <span>
-                            <BsCreditCard size={25} />
-                          </span>
-                        </Tooltip>
-                      ) : purchase.paymentMethod === PaymentMethod.PayPal ? (
-                        <Tooltip
-                          label={PaymentMethod.PayPal}
-                          placement="top"
-                          offset={[-60, 5]}
-                        >
-                          <span>
-                            <BsPaypal size={25} />
-                          </span>
-                        </Tooltip>
-                      ) : purchase.paymentMethod === PaymentMethod.Pix ? (
-                        <Tooltip
-                          label={PaymentMethod.Pix}
-                          placement="top"
-                          offset={[-60, 5]}
-                        >
-                          <span>
-                            <SiPix size={25} />
-                          </span>
-                        </Tooltip>
-                      ) : (
-                        <Tooltip
-                          label="Payment method info unavailable"
-                          placement="top"
-                          offset={[-60, 5]}
-                        >
-                          <span>
-                            <RxCircleBackslash size={25} />
-                          </span>
-                        </Tooltip>
-                      )}
+                      <PaymentMethodIcon
+                        method={purchase.paymentMethod}
+                      ></PaymentMethodIcon>
                     </Td>
                     <Td>
                       <CustomerInfo customer={purchase.customer}></CustomerInfo>
