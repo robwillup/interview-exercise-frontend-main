@@ -6,11 +6,13 @@ import {
   AccordionPanel,
   Box,
   Checkbox,
+  Flex,
   HStack,
   Input,
   InputGroup,
   InputLeftElement,
   Stack,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { Filter, PaymentMethod, Status } from "./Types";
 import { useState } from "react";
@@ -27,6 +29,7 @@ const Filters: React.FC<FiltersProps> = ({ handleFilterChange, filter }) => {
   const [currency, setCurrency] = useState("");
   const [userName, setUserName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
+  const [isMobile] = useMediaQuery("(max-width: 768px)");
 
   const handleStatusCheckBoxChange = (status: Status) => {
     const updatedFilter = {
@@ -108,114 +111,78 @@ const Filters: React.FC<FiltersProps> = ({ handleFilterChange, filter }) => {
           </AccordionButton>
         </h2>
         <AccordionPanel pb={4}>
-          <HStack spacing={10} alignItems="start">
+          <Flex
+            direction={isMobile ? "column" : "row"}
+            alignItems="start"
+            gap={isMobile ? 4 : 10}
+          >
             <Box>
-              <Stack>
-                <Checkbox
-                  onChange={() => handleStatusCheckBoxChange(Status.Completed)}
-                >
+              <Stack spacing={2}>
+                <Checkbox onChange={() => handleStatusCheckBoxChange(Status.Completed)}>
                   Completed
                 </Checkbox>
-                <Checkbox
-                  onChange={() => handleStatusCheckBoxChange(Status.Pending)}
-                >
+                <Checkbox onChange={() => handleStatusCheckBoxChange(Status.Pending)}>
                   Pending
                 </Checkbox>
-                <Checkbox
-                  onChange={() => handleStatusCheckBoxChange(Status.Failed)}
-                >
+                <Checkbox onChange={() => handleStatusCheckBoxChange(Status.Failed)}>
                   Failed
                 </Checkbox>
               </Stack>
             </Box>
             <Box>
-              <Stack>
-                <Checkbox
-                  onChange={() =>
-                    handlePaymentMethodCheckBoxChange(PaymentMethod.CreditCard)
-                  }
-                >
+              <Stack spacing={2}>
+                <Checkbox onChange={() => handlePaymentMethodCheckBoxChange(PaymentMethod.CreditCard)}>
                   Credit Card
                 </Checkbox>
-                <Checkbox
-                  onChange={() =>
-                    handlePaymentMethodCheckBoxChange(
-                      PaymentMethod.BankTransfer
-                    )
-                  }
-                >
+                <Checkbox onChange={() => handlePaymentMethodCheckBoxChange(PaymentMethod.BankTransfer)}>
                   Bank Transfer
                 </Checkbox>
-                <Checkbox
-                  onChange={() =>
-                    handlePaymentMethodCheckBoxChange(PaymentMethod.PayPal)
-                  }
-                >
+                <Checkbox onChange={() => handlePaymentMethodCheckBoxChange(PaymentMethod.PayPal)}>
                   PayPal
                 </Checkbox>
-                <Checkbox
-                  onChange={() =>
-                    handlePaymentMethodCheckBoxChange(PaymentMethod.Pix)
-                  }
-                >
+                <Checkbox onChange={() => handlePaymentMethodCheckBoxChange(PaymentMethod.Pix)}>
                   Pix
                 </Checkbox>
-                <Checkbox
-                  onChange={() =>
-                    handlePaymentMethodCheckBoxChange(PaymentMethod.Cash)
-                  }
-                >
+                <Checkbox onChange={() => handlePaymentMethodCheckBoxChange(PaymentMethod.Cash)}>
                   Cash
                 </Checkbox>
               </Stack>
             </Box>
             <Box>
               <Stack spacing={2} alignItems="start">
-                <Box>
-                  <HStack alignItems="start">
-                    <InputGroup>
-                      <InputLeftElement>
-                        <BsCashCoin></BsCashCoin>
-                      </InputLeftElement>
-                      <Input
-                        value={currency}
-                        onChange={(e) => handleCurrencyChange(e.target.value)}
-                        placeholder="Currency"
-                      />
-                    </InputGroup>
-                  </HStack>
-                </Box>
-                <Box>
-                  <HStack>
-                    <InputGroup>
-                      <InputLeftElement>
-                        <CiUser></CiUser>
-                      </InputLeftElement>
-                      <Input
-                        value={userName}
-                        onChange={(e) => handleNameChange(e.target.value)}
-                        placeholder="User name"
-                      />
-                    </InputGroup>
-                  </HStack>
-                </Box>
-                <Box>
-                  <HStack>
-                    <InputGroup>
-                      <InputLeftElement>
-                        <MdEmail></MdEmail>
-                      </InputLeftElement>
-                      <Input
-                        value={emailAddress}
-                        onChange={(e) => handleEmailChange(e.target.value)}
-                        placeholder="User email address"
-                      />
-                    </InputGroup>
-                  </HStack>
-                </Box>
+                <InputGroup>
+                  <InputLeftElement>
+                    <BsCashCoin />
+                  </InputLeftElement>
+                  <Input
+                    value={currency}
+                    onChange={(e) => handleCurrencyChange(e.target.value)}
+                    placeholder="Currency"
+                  />
+                </InputGroup>
+                <InputGroup>
+                  <InputLeftElement>
+                    <CiUser />
+                  </InputLeftElement>
+                  <Input
+                    value={userName}
+                    onChange={(e) => handleNameChange(e.target.value)}
+                    placeholder="User name"
+                  />
+                </InputGroup>
+                <InputGroup>
+                  <InputLeftElement>
+                    <MdEmail />
+                  </InputLeftElement>
+                  <Input
+                    value={emailAddress}
+                    onChange={(e) => handleEmailChange(e.target.value)}
+                    placeholder="User email address"
+                  />
+                </InputGroup>
               </Stack>
             </Box>
-          </HStack>
+          </Flex>
         </AccordionPanel>
       </AccordionItem>
     </Accordion>

@@ -201,7 +201,7 @@ const TransactionBoard: React.FC = () => {
         </FormControl>
         <Box position="relative" padding={isMobile ? "5" : "10"}>
           <Divider />
-          <AbsoluteCenter bg="white" px="4">
+          <AbsoluteCenter bg="white">
             {totalTransactions} Transactions
           </AbsoluteCenter>
         </Box>
