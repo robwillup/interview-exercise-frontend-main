@@ -13,12 +13,14 @@ import {
   Tr,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import { Sort, Transaction } from "./Types";
+import { Sort, Status, Transaction } from "./Types";
 import Products from "./Products";
 import { useState } from "react";
 import CustomerInfo from "./Customer";
 import React from "react";
 import PaymentMethodIcon from "./PaymentMethodIcon";
+import { FaCheckCircle, FaClock } from "react-icons/fa";
+import { FaCircleXmark } from "react-icons/fa6";
 
 interface PurchasesProps {
   purchases: Transaction[];
@@ -26,15 +28,19 @@ interface PurchasesProps {
   handleSort: React.Dispatch<React.SetStateAction<Sort>>;
 }
 
-const Purchases: React.FC<PurchasesProps> = ({ purchases, handleSort, sort }) => {
+const Purchases: React.FC<PurchasesProps> = ({
+  purchases,
+  handleSort,
+  sort,
+}) => {
   const [openRow, setOpenRow] = useState<number | null>(null);
 
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   const badgeColorMap = {
-    Completed: "green.50",
-    Pending: "orange.50",
-    Failed: "red.50",
+    Completed: "green",
+    Pending: "orange",
+    Failed: "red",
   };
 
   const toggleRow = (index: number) => {
@@ -44,7 +50,7 @@ const Purchases: React.FC<PurchasesProps> = ({ purchases, handleSort, sort }) =>
   const handleDateSort = () => {
     const updatedSort = {
       ...sort,
-      dateAsc: !sort.dateAsc
+      dateAsc: !sort.dateAsc,
     };
 
     handleSort(updatedSort);
@@ -53,7 +59,7 @@ const Purchases: React.FC<PurchasesProps> = ({ purchases, handleSort, sort }) =>
   const handleTotalSort = () => {
     const updatedSort = {
       ...sort,
-      totalAsc: !sort.totalAsc
+      totalAsc: !sort.totalAsc,
     };
 
     handleSort(updatedSort);
@@ -67,12 +73,26 @@ const Purchases: React.FC<PurchasesProps> = ({ purchases, handleSort, sort }) =>
             <Box
               key={id}
               p={4}
-              bg={badgeColorMap[purchase.status]}
+              bg={"gray.50"}
               border="1px"
               borderRadius="md"
               onClick={() => toggleRow(id)}
               _hover={{ bg: "blue.100" }}
             >
+              <Flex justifyContent="space-between" mb={2}>
+                <Text fontWeight="bold" fontSize="md" color="gray.700">
+                  Status:
+                </Text>
+                <Box color={badgeColorMap[purchase.status]}>
+                  {purchase.status === Status.Completed ? (
+                    <FaCheckCircle />
+                  ) : purchase.status === Status.Pending ? (
+                    <FaClock />
+                  ) : (
+                    <FaCircleXmark />
+                  )}
+                </Box>
+              </Flex>
               <Flex justifyContent="space-between" mb={2}>
                 <Text fontWeight="bold" fontSize="md" color="gray.700">
                   Date:
@@ -129,6 +149,7 @@ const Purchases: React.FC<PurchasesProps> = ({ purchases, handleSort, sort }) =>
           <Table size={isMobile ? "sm" : "md"}>
             <Thead>
               <Tr>
+                <Th w={1}>Status</Th>
                 <Th onClick={() => handleDateSort()}>Purchased On</Th>
                 <Th onClick={() => handleTotalSort()}>Total</Th>
                 <Th>Payment Method</Th>
@@ -145,8 +166,18 @@ const Purchases: React.FC<PurchasesProps> = ({ purchases, handleSort, sort }) =>
                         bg: "blue.100",
                       },
                     }}
-                    bg={badgeColorMap[purchase.status]}
                   >
+                    <Td w={1}>
+                      <Box color={badgeColorMap[purchase.status]}>
+                        {purchase.status === Status.Completed ? (
+                          <FaCheckCircle />
+                        ) : purchase.status === Status.Pending ? (
+                          <FaClock />
+                        ) : (
+                          <FaCircleXmark />
+                        )}
+                      </Box>
+                    </Td>
                     <Td onClick={() => toggleRow(id)}>
                       {purchase.date.toDateString()}
                     </Td>
@@ -179,6 +210,7 @@ const Purchases: React.FC<PurchasesProps> = ({ purchases, handleSort, sort }) =>
             </Tbody>
             <Tfoot>
               <Tr>
+                <Th>Status</Th>
                 <Th>Purchased On</Th>
                 <Th>Total</Th>
                 <Th>Payment Method</Th>
