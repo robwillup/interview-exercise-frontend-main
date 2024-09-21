@@ -1,4 +1,7 @@
-# Getting Started with Create React App
+# Purchase Overview App
+
+This is a Single Page Application that offers users options to view and interact with
+purchase data.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

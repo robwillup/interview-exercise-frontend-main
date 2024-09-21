@@ -14,7 +14,7 @@ const PaymentMethodIcon: React.FC<PaymentMethodIconProps> = ({ method }) => {
       {method === PaymentMethod.Cash ? (
         <Tooltip label={PaymentMethod.Cash} placement="top" offset={[-60, 5]}>
           <span>
-            <BsCashCoin size={25} />
+            <BsCashCoin size={20} />
           </span>
         </Tooltip>
       ) : method === PaymentMethod.BankTransfer ? (
@@ -24,7 +24,7 @@ const PaymentMethodIcon: React.FC<PaymentMethodIconProps> = ({ method }) => {
           offset={[-60, 5]}
         >
           <span>
-            <BsBank2 size={25} />
+            <BsBank2 size={20} />
           </span>
         </Tooltip>
       ) : method === PaymentMethod.CreditCard ? (
@@ -34,19 +34,19 @@ const PaymentMethodIcon: React.FC<PaymentMethodIconProps> = ({ method }) => {
           offset={[-60, 5]}
         >
           <span>
-            <BsCreditCard size={25} />
+            <BsCreditCard size={20} />
           </span>
         </Tooltip>
       ) : method === PaymentMethod.PayPal ? (
         <Tooltip label={PaymentMethod.PayPal} placement="top" offset={[-60, 5]}>
           <span>
-            <BsPaypal size={25} />
+            <BsPaypal size={20} />
           </span>
         </Tooltip>
       ) : method === PaymentMethod.Pix ? (
         <Tooltip label={PaymentMethod.Pix} placement="top" offset={[-60, 5]}>
           <span>
-            <SiPix size={25} />
+            <SiPix size={20} />
           </span>
         </Tooltip>
       ) : (
@@ -56,7 +56,7 @@ const PaymentMethodIcon: React.FC<PaymentMethodIconProps> = ({ method }) => {
           offset={[-60, 5]}
         >
           <span>
-            <RxCircleBackslash size={25} />
+            <RxCircleBackslash size={20} />
           </span>
         </Tooltip>
       )}

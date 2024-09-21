@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Flex,
   Stack,
   Table,
@@ -7,7 +8,6 @@ import {
   Tbody,
   Td,
   Text,
-  Tfoot,
   Th,
   Thead,
   Tr,
@@ -21,6 +21,7 @@ import React from "react";
 import PaymentMethodIcon from "./PaymentMethodIcon";
 import { FaCheckCircle, FaClock } from "react-icons/fa";
 import { FaCircleXmark } from "react-icons/fa6";
+import { RxChevronDown, RxChevronUp } from "react-icons/rx";
 
 interface PurchasesProps {
   purchases: Transaction[];
@@ -77,7 +78,7 @@ const Purchases: React.FC<PurchasesProps> = ({
               border="1px"
               borderRadius="md"
               onClick={() => toggleRow(id)}
-              _hover={{ bg: "blue.100" }}
+              _hover={{ bg: "blue.50" }}
             >
               <Flex justifyContent="space-between" mb={2}>
                 <Text fontWeight="bold" fontSize="md" color="gray.700">
@@ -150,10 +151,29 @@ const Purchases: React.FC<PurchasesProps> = ({
             <Thead>
               <Tr>
                 <Th w={1}>Status</Th>
-                <Th onClick={() => handleDateSort()}>Purchased On</Th>
-                <Th onClick={() => handleTotalSort()}>Total</Th>
+                <Th>
+                  Purchased On
+                  <Button
+                    onClick={() => handleDateSort()}
+                    colorScheme="blue"
+                    variant="link"
+                  >
+                    {sort.dateAsc ? <RxChevronUp /> : <RxChevronDown />}
+                  </Button>
+                </Th>
+                <Th onClick={() => handleTotalSort()}>
+                  Total
+                  <Button
+                    onClick={() => handleTotalSort()}
+                    colorScheme="blue"
+                    variant="link"
+                  >
+                    {sort.totalAsc ? <RxChevronUp /> : <RxChevronDown />}
+                  </Button>
+                </Th>
                 <Th>Payment Method</Th>
                 <Th>Customer</Th>
+                <Th>Product Details</Th>
               </Tr>
             </Thead>
             <Tbody fontSize={isMobile ? "14px" : "16px"}>
@@ -163,7 +183,7 @@ const Purchases: React.FC<PurchasesProps> = ({
                     sx={{
                       cursor: "pointer",
                       _hover: {
-                        bg: "blue.100",
+                        bg: "blue.50",
                       },
                     }}
                   >
@@ -192,10 +212,15 @@ const Purchases: React.FC<PurchasesProps> = ({
                     <Td>
                       <CustomerInfo customer={purchase.customer}></CustomerInfo>
                     </Td>
+                    <Td onClick={() => toggleRow(id)}>
+                      <Button colorScheme="blue" variant="link">
+                        {openRow === id ? <RxChevronUp /> : <RxChevronDown />}
+                      </Button>
+                    </Td>
                   </Tr>
                   {openRow === id && (
                     <Tr>
-                      <Td colSpan={isMobile ? 2 : 4}>
+                      <Td colSpan={isMobile ? 2 : 6}>
                         <Box>
                           <Products
                             products={purchase.products}
@@ -208,15 +233,6 @@ const Purchases: React.FC<PurchasesProps> = ({
                 </React.Fragment>
               ))}
             </Tbody>
-            <Tfoot>
-              <Tr>
-                <Th>Status</Th>
-                <Th>Purchased On</Th>
-                <Th>Total</Th>
-                <Th>Payment Method</Th>
-                <Th>Customer</Th>
-              </Tr>
-            </Tfoot>
           </Table>
         </TableContainer>
       )}

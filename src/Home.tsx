@@ -10,6 +10,10 @@ import {
   Text,
   Flex,
   useMediaQuery,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  Box,
 } from "@chakra-ui/react";
 import TransactionBoard from "./TransactionBoard";
 import { useCallback, useEffect, useState } from "react";
@@ -40,26 +44,21 @@ const mapJsonToTransaction = (data: any): Transaction => {
 };
 
 const Home: React.FC = () => {
-  const [isHome, setIsHome] = useState(true);
-  const [isList, setIsList] = useState(false);
-  const [isStats, setIsStats] = useState(false);
   const [isMobile] = useMediaQuery("(max-width: 768px)");
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [breadCrumbs, setBreadCrumbs] = useState(["Home"]);
 
-  const getTransactions = useCallback(
-    async () => {
-      try {
-        const response = await fetch("transactions.json");
-        const json = await response.json();
-        const mappedTransactions = json.map(mapJsonToTransaction);
+  const getTransactions = useCallback(async () => {
+    try {
+      const response = await fetch("transactions.json");
+      const json = await response.json();
+      const mappedTransactions = json.map(mapJsonToTransaction);
 
-        return mappedTransactions;
-      } catch (error) {
-        return [];
-      }
-    },
-    []
-  );
+      return mappedTransactions;
+    } catch (error) {
+      return [];
+    }
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,15 +70,11 @@ const Home: React.FC = () => {
   }, [getTransactions]);
 
   const handleGoList = () => {
-    setIsHome(false);
-    setIsStats(false);
-    setIsList(true);
+    setBreadCrumbs(["Home", "Overview"]);
   };
 
   const handleGoStats = () => {
-    setIsHome(false);
-    setIsList(false);
-    setIsStats(true);
+    setBreadCrumbs(["Home", "Stats"]);
   };
 
   const handleCardGoStats = () => {
@@ -94,10 +89,33 @@ const Home: React.FC = () => {
     }
   };
 
+  const handleBreadcrumbClick = (index: number) => {
+    const newBreadCrumbs = breadCrumbs.slice(0, index + 1);
+    setBreadCrumbs(newBreadCrumbs);
+
+    if (newBreadCrumbs.includes("Overview")) {
+      handleGoList();
+    } else if (newBreadCrumbs.includes("Stats")) {
+      handleGoStats();
+    }
+  };
+
   return (
-    <>
-      {isHome && (
-        <Flex direction={isMobile ? "column" : "row"} gap={4}>
+    <Flex direction="column" width="100%" alignItems="center">
+      <Box width="100%" maxWidth="xl" px={4}>
+        <Breadcrumb fontSize={18}>
+          {breadCrumbs.map((breadCrumb, i) => (
+            <BreadcrumbItem key={i}>
+              <BreadcrumbLink href="#" onClick={() => handleBreadcrumbClick(i)}>
+                {breadCrumb}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          ))}
+        </Breadcrumb>
+      </Box>
+
+      {breadCrumbs.length === 1 && (
+        <Flex direction={isMobile ? "column" : "row"} gap={4} pt={4}>
           <Card maxW="xl" onClick={isMobile ? handleCardGoStats : undefined}>
             <CardBody>
               <Image
@@ -160,9 +178,13 @@ const Home: React.FC = () => {
           </Card>
         </Flex>
       )}
-      {isList && <TransactionBoard purchases={transactions} />}
-      {isStats && <TransactionStats purchases={transactions} />}
-    </>
+      {breadCrumbs.length > 1 && breadCrumbs[1] === "Overview" && (
+        <TransactionBoard purchases={transactions} />
+      )}
+      {breadCrumbs.length > 1 && breadCrumbs[1] === "Stats" && (
+        <TransactionStats purchases={transactions} />
+      )}
+    </Flex>
   );
 };
 

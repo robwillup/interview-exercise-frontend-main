@@ -117,32 +117,60 @@ const Filters: React.FC<FiltersProps> = ({ handleFilterChange, filter }) => {
           >
             <Box>
               <Stack spacing={2}>
-                <Checkbox onChange={() => handleStatusCheckBoxChange(Status.Completed)}>
+                <Checkbox
+                  onChange={() => handleStatusCheckBoxChange(Status.Completed)}
+                >
                   Completed
                 </Checkbox>
-                <Checkbox onChange={() => handleStatusCheckBoxChange(Status.Pending)}>
+                <Checkbox
+                  onChange={() => handleStatusCheckBoxChange(Status.Pending)}
+                >
                   Pending
                 </Checkbox>
-                <Checkbox onChange={() => handleStatusCheckBoxChange(Status.Failed)}>
+                <Checkbox
+                  onChange={() => handleStatusCheckBoxChange(Status.Failed)}
+                >
                   Failed
                 </Checkbox>
               </Stack>
             </Box>
             <Box>
               <Stack spacing={2}>
-                <Checkbox onChange={() => handlePaymentMethodCheckBoxChange(PaymentMethod.CreditCard)}>
+                <Checkbox
+                  onChange={() =>
+                    handlePaymentMethodCheckBoxChange(PaymentMethod.CreditCard)
+                  }
+                >
                   Credit Card
                 </Checkbox>
-                <Checkbox onChange={() => handlePaymentMethodCheckBoxChange(PaymentMethod.BankTransfer)}>
+                <Checkbox
+                  onChange={() =>
+                    handlePaymentMethodCheckBoxChange(
+                      PaymentMethod.BankTransfer
+                    )
+                  }
+                >
                   Bank Transfer
                 </Checkbox>
-                <Checkbox onChange={() => handlePaymentMethodCheckBoxChange(PaymentMethod.PayPal)}>
+                <Checkbox
+                  onChange={() =>
+                    handlePaymentMethodCheckBoxChange(PaymentMethod.PayPal)
+                  }
+                >
                   PayPal
                 </Checkbox>
-                <Checkbox onChange={() => handlePaymentMethodCheckBoxChange(PaymentMethod.Pix)}>
+                <Checkbox
+                  onChange={() =>
+                    handlePaymentMethodCheckBoxChange(PaymentMethod.Pix)
+                  }
+                >
                   Pix
                 </Checkbox>
-                <Checkbox onChange={() => handlePaymentMethodCheckBoxChange(PaymentMethod.Cash)}>
+                <Checkbox
+                  onChange={() =>
+                    handlePaymentMethodCheckBoxChange(PaymentMethod.Cash)
+                  }
+                >
                   Cash
                 </Checkbox>
               </Stack>

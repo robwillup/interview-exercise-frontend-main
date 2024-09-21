@@ -1,12 +1,14 @@
 import {
-  HStack,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverTrigger,
+  Button,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { Customer } from "./Types";
 import { GoInfo } from "react-icons/go";
@@ -16,26 +18,36 @@ interface CustomerInfoProps {
 }
 
 const CustomerInfo: React.FC<CustomerInfoProps> = ({ customer }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Popover placement="left">
-      <PopoverTrigger>
-        <span>
-          <HStack>
-            <GoInfo size={25} />
-            <Text>{customer.name}</Text>
-          </HStack>
-        </span>
-      </PopoverTrigger>
-      <PopoverContent fontSize={18} w={500} bg="gray.100">
-        <PopoverArrow />
-        <PopoverCloseButton />
-        <PopoverBody textAlign="left">
-          <strong>Email address:</strong> {customer.email}
-          <br />
-          <strong>Age:</strong> {customer.age}
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
+    <>
+      <Button
+        onClick={onOpen}
+        leftIcon={<GoInfo />}
+        colorScheme="blue"
+        variant="link"
+      >
+        {customer.name}
+      </Button>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{customer.name}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>Email Address: {customer.email}</Text>
+            <Text>Age: {customer.age} </Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
 };
 

@@ -85,25 +85,29 @@ const filterTransactions = (
   });
 };
 
-const sortTransactions = (transactions: Transaction[], sort: Sort): Transaction[] => {
+const sortTransactions = (
+  transactions: Transaction[],
+  sort: Sort
+): Transaction[] => {
   return [...transactions].sort((a, b) => {
-    // Handle date sorting if specified
     if (sort.dateAsc !== undefined) {
-      const dateComparison: number = sort.dateAsc ? a.date.getTime() - b.date.getTime() : b.date.getTime() - a.date.getTime();
+      const dateComparison: number = sort.dateAsc
+        ? a.date.getTime() - b.date.getTime()
+        : b.date.getTime() - a.date.getTime();
       if (dateComparison !== 0) {
         return dateComparison;
       }
     }
 
-    // Handle total sorting if specified
     if (sort.totalAsc !== undefined) {
-      return sort.totalAsc ? a.totalAmount - b.totalAmount : b.totalAmount - a.totalAmount;
+      return sort.totalAsc
+        ? a.totalAmount - b.totalAmount
+        : b.totalAmount - a.totalAmount;
     }
 
-    return 0; // Default case if no sorting criteria is met
+    return 0;
   });
 };
-
 
 interface PurchaseListProps {
   purchases: Transaction[];
@@ -123,7 +127,10 @@ const TransactionBoard: React.FC<PurchaseListProps> = ({ purchases }) => {
   const getTransactions = useCallback(
     async (startIndex: number, count: number): Promise<Transaction[]> => {
       try {
-        const filteredTransactions = sortTransactions(filterTransactions(purchases, filter), sort);
+        const filteredTransactions = sortTransactions(
+          filterTransactions(purchases, filter),
+          sort
+        );
 
         setTotalTransactions(filteredTransactions.length);
 
@@ -169,7 +176,11 @@ const TransactionBoard: React.FC<PurchaseListProps> = ({ purchases }) => {
           </AbsoluteCenter>
         </Box>
         <Box flex="1" overflowY="auto">
-          <Purchases purchases={transactions} handleSort={setSort} sort={sort}></Purchases>
+          <Purchases
+            purchases={transactions}
+            handleSort={setSort}
+            sort={sort}
+          ></Purchases>
         </Box>
         <PageButtons
           page={page}
