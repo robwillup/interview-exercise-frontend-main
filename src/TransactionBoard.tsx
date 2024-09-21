@@ -19,7 +19,6 @@ import {
   RxChevronLeft,
   RxChevronRight,
 } from "react-icons/rx";
-import Stats from "./Stats";
 
 const mapJsonToTransaction = (data: any): Transaction => {
   return {

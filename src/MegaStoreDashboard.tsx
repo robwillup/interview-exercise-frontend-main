@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import TransactionBoard from "./TransactionBoard";
 import { useState } from "react";
+import TransactionStats from "./TransactionStats";
 
 const MegaStoreDashboard: React.FC = () => {
   const [isHome, setIsHome] = useState(true);
@@ -87,6 +88,7 @@ const MegaStoreDashboard: React.FC = () => {
         </Flex>
       )}
       {isList && <TransactionBoard />}
+      {isStats && <TransactionStats />}
     </>
   );
 };

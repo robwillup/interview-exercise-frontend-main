@@ -1,24 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { Filter, PaymentMethod, Status, Transaction } from "./Types";
+import { Transaction } from "./Types";
 import {
-  AbsoluteCenter,
   Box,
-  Button,
   Card,
-  Divider,
-  FormControl,
-  Text,
-  Stack,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import Purchases from "./Purchases";
-import Filters from "./Filters";
-import {
-  RxDoubleArrowLeft,
-  RxDoubleArrowRight,
-  RxChevronLeft,
-  RxChevronRight,
-} from "react-icons/rx";
 import Stats from "./Stats";
 
 const mapJsonToTransaction = (data: any): Transaction => {
@@ -44,145 +30,34 @@ const mapJsonToTransaction = (data: any): Transaction => {
   };
 };
 
-const filterTransactions = (
-  transactions: Transaction[],
-  filter: Filter
-): Transaction[] => {
-  return transactions.filter((transaction) => {
-    let statusMatches = true;
-    let paymentMethodMatches = true;
-    let currencyMatches = true;
-    let nameMatches = true;
-    let emailMatches = true;
-
-    if (filter.statusCompleted || filter.statusPending || filter.statusFailed) {
-      statusMatches = false;
-
-      if (filter.statusCompleted && transaction.status === Status.Completed) {
-        statusMatches = true;
-      }
-      if (filter.statusPending && transaction.status === Status.Pending) {
-        statusMatches = true;
-      }
-      if (filter.statusFailed && transaction.status === Status.Failed) {
-        statusMatches = true;
-      }
-    }
-
-    if (
-      filter.creditCard ||
-      filter.bankTransfer ||
-      filter.payPal ||
-      filter.pix ||
-      filter.cash
-    ) {
-      paymentMethodMatches = false;
-
-      if (
-        filter.creditCard &&
-        transaction.paymentMethod === PaymentMethod.CreditCard
-      ) {
-        paymentMethodMatches = true;
-      }
-      if (
-        filter.bankTransfer &&
-        transaction.paymentMethod === PaymentMethod.BankTransfer
-      ) {
-        paymentMethodMatches = true;
-      }
-      if (filter.payPal && transaction.paymentMethod === PaymentMethod.PayPal) {
-        paymentMethodMatches = true;
-      }
-      if (filter.pix && transaction.paymentMethod === PaymentMethod.Pix) {
-        paymentMethodMatches = true;
-      }
-      if (filter.cash && transaction.paymentMethod === PaymentMethod.Cash) {
-        paymentMethodMatches = true;
-      }
-    }
-
-    if (filter.currency) {
-      currencyMatches = false;
-
-      if (transaction.currency.includes(filter.currency)) {
-        currencyMatches = true;
-      }
-    }
-
-    if (filter.userName) {
-      nameMatches = false;
-
-      if (transaction.customer.name.includes(filter.userName)) {
-        nameMatches = true;
-      }
-    }
-
-    if (filter.emailAddress) {
-      emailMatches = false;
-
-      if (transaction.customer.email.includes(filter.emailAddress)) {
-        emailMatches = true;
-      }
-    }
-
-    return (
-      statusMatches &&
-      paymentMethodMatches &&
-      currencyMatches &&
-      nameMatches &&
-      emailMatches
-    );
-  });
-};
-
 const TransactionStats: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [page, setPage] = useState(0);
-  const [totalTransactions, setTotalTransactions] = useState(0);
-  const [filter, setFilter] = useState<Filter>({});
-
-  const itemsPerPage = 5;
 
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   const getTransactions = useCallback(
-    async (startIndex: number, count: number) => {
+    async () => {
       try {
         const response = await fetch("transactions.json");
         const json = await response.json();
         const mappedTransactions = json.map(mapJsonToTransaction);
-        const filteredTransactions = filterTransactions(
-          mappedTransactions,
-          filter
-        );
 
-        setTotalTransactions(filteredTransactions.length);
-
-        return filteredTransactions.slice(startIndex, startIndex + count);
+        return mappedTransactions;
       } catch (error) {
         return [];
       }
     },
-    [filter]
+    []
   );
 
   useEffect(() => {
     const fetchData = async () => {
-      const transactions = await getTransactions(
-        page * itemsPerPage,
-        itemsPerPage
-      );
+      const transactions = await getTransactions();
       setTransactions(transactions);
     };
 
     fetchData();
-  }, [getTransactions, page]);
-
-  const lastPage = Math.max(Math.ceil(totalTransactions / itemsPerPage) - 1, 0);
-
-  const handleFilterChange = (filter: Filter) => {
-    setFilter(filter);
-  };
+  }, [getTransactions]);
 
   return (
     <Box display="flex" justifyContent="center" p={4}>
