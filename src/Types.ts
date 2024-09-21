@@ -37,6 +37,11 @@ export interface Filter {
     emailAddress?: string;
 }
 
+export interface Sort {
+    dateAsc?: boolean;
+    totalAsc?: boolean;
+}
+
 export enum Status {
     Completed = "Completed",
     Pending = "Pending",

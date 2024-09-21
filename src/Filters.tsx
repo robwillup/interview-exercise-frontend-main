@@ -20,7 +20,7 @@ import { CiUser } from "react-icons/ci";
 import { MdEmail } from "react-icons/md";
 
 interface FiltersProps {
-  handleFilterChange: (filter: Filter) => void;
+  handleFilterChange: React.Dispatch<React.SetStateAction<Filter>>;
   filter: Filter;
 }
 

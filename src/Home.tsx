@@ -12,14 +12,63 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import TransactionBoard from "./TransactionBoard";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import TransactionStats from "./TransactionStats";
+import { Transaction } from "./Types";
+
+const mapJsonToTransaction = (data: any): Transaction => {
+  return {
+    id: data.transaction_id,
+    customer: {
+      name: data.customer_name,
+      email: data.email,
+      age: data.age,
+    },
+    date: new Date(data.purchase_date),
+    products: data.products.map((product: any) => ({
+      id: product.product_id,
+      name: product.product_name,
+      category: product.category,
+      quantity: product.quantity,
+      price: product.price,
+    })),
+    paymentMethod: data.payment_method,
+    currency: data.currency,
+    status: data.status,
+    totalAmount: data.total_amount,
+  };
+};
 
 const Home: React.FC = () => {
   const [isHome, setIsHome] = useState(true);
   const [isList, setIsList] = useState(false);
   const [isStats, setIsStats] = useState(false);
   const [isMobile] = useMediaQuery("(max-width: 768px)");
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  const getTransactions = useCallback(
+    async () => {
+      try {
+        const response = await fetch("transactions.json");
+        const json = await response.json();
+        const mappedTransactions = json.map(mapJsonToTransaction);
+
+        return mappedTransactions;
+      } catch (error) {
+        return [];
+      }
+    },
+    []
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const transactions = await getTransactions();
+      setTransactions(transactions);
+    };
+
+    fetchData();
+  }, [getTransactions]);
 
   const handleGoList = () => {
     setIsHome(false);
@@ -111,8 +160,8 @@ const Home: React.FC = () => {
           </Card>
         </Flex>
       )}
-      {isList && <TransactionBoard />}
-      {isStats && <TransactionStats />}
+      {isList && <TransactionBoard purchases={transactions} />}
+      {isStats && <TransactionStats purchases={transactions} />}
     </>
   );
 };

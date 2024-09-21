@@ -1,159 +1,129 @@
 import { useCallback, useEffect, useState } from "react";
-import { Filter, PaymentMethod, Status, Transaction } from "./Types";
+import { Filter, PaymentMethod, Sort, Status, Transaction } from "./Types";
 import {
   AbsoluteCenter,
   Box,
-  Button,
   Card,
   Divider,
   FormControl,
-  Text,
-  Stack,
   useBreakpointValue,
 } from "@chakra-ui/react";
 import Purchases from "./Purchases";
 import Filters from "./Filters";
-import {
-  RxDoubleArrowLeft,
-  RxDoubleArrowRight,
-  RxChevronLeft,
-  RxChevronRight,
-} from "react-icons/rx";
-
-const mapJsonToTransaction = (data: any): Transaction => {
-  return {
-    id: data.transaction_id,
-    customer: {
-      name: data.customer_name,
-      email: data.email,
-      age: data.age,
-    },
-    date: new Date(data.purchase_date),
-    products: data.products.map((product: any) => ({
-      id: product.product_id,
-      name: product.product_name,
-      category: product.category,
-      quantity: product.quantity,
-      price: product.price,
-    })),
-    paymentMethod: data.payment_method,
-    currency: data.currency,
-    status: data.status,
-    totalAmount: data.total_amount,
-  };
-};
+import PageButtons from "./PageButtons";
 
 const filterTransactions = (
   transactions: Transaction[],
   filter: Filter
 ): Transaction[] => {
-  return transactions.filter((transaction) => {
-    let statusMatches = true;
-    let paymentMethodMatches = true;
-    let currencyMatches = true;
-    let nameMatches = true;
-    let emailMatches = true;
-
-    if (filter.statusCompleted || filter.statusPending || filter.statusFailed) {
-      statusMatches = false;
-
-      if (filter.statusCompleted && transaction.status === Status.Completed) {
-        statusMatches = true;
-      }
-      if (filter.statusPending && transaction.status === Status.Pending) {
-        statusMatches = true;
-      }
-      if (filter.statusFailed && transaction.status === Status.Failed) {
-        statusMatches = true;
-      }
-    }
-
+  const matchesStatus = (transaction: Transaction): boolean => {
     if (
-      filter.creditCard ||
-      filter.bankTransfer ||
-      filter.payPal ||
-      filter.pix ||
-      filter.cash
+      !filter.statusCompleted &&
+      !filter.statusPending &&
+      !filter.statusFailed
     ) {
-      paymentMethodMatches = false;
-
-      if (
-        filter.creditCard &&
-        transaction.paymentMethod === PaymentMethod.CreditCard
-      ) {
-        paymentMethodMatches = true;
-      }
-      if (
-        filter.bankTransfer &&
-        transaction.paymentMethod === PaymentMethod.BankTransfer
-      ) {
-        paymentMethodMatches = true;
-      }
-      if (filter.payPal && transaction.paymentMethod === PaymentMethod.PayPal) {
-        paymentMethodMatches = true;
-      }
-      if (filter.pix && transaction.paymentMethod === PaymentMethod.Pix) {
-        paymentMethodMatches = true;
-      }
-      if (filter.cash && transaction.paymentMethod === PaymentMethod.Cash) {
-        paymentMethodMatches = true;
-      }
+      return true;
     }
-
-    if (filter.currency) {
-      currencyMatches = false;
-
-      if (transaction.currency.includes(filter.currency)) {
-        currencyMatches = true;
-      }
-    }
-
-    if (filter.userName) {
-      nameMatches = false;
-
-      if (transaction.customer.name.includes(filter.userName)) {
-        nameMatches = true;
-      }
-    }
-
-    if (filter.emailAddress) {
-      emailMatches = false;
-
-      if (transaction.customer.email.includes(filter.emailAddress)) {
-        emailMatches = true;
-      }
-    }
-
     return (
-      statusMatches &&
-      paymentMethodMatches &&
-      currencyMatches &&
-      nameMatches &&
-      emailMatches
+      ((filter.statusCompleted ?? false) &&
+        transaction.status === Status.Completed) ||
+      ((filter.statusPending ?? false) &&
+        transaction.status === Status.Pending) ||
+      ((filter.statusFailed ?? false) && transaction.status === Status.Failed)
+    );
+  };
+
+  const matchesPaymentMethod = (transaction: Transaction): boolean => {
+    if (
+      !filter.creditCard &&
+      !filter.bankTransfer &&
+      !filter.payPal &&
+      !filter.pix &&
+      !filter.cash
+    ) {
+      return true;
+    }
+    return (
+      ((filter.creditCard ?? false) &&
+        transaction.paymentMethod === PaymentMethod.CreditCard) ||
+      ((filter.bankTransfer ?? false) &&
+        transaction.paymentMethod === PaymentMethod.BankTransfer) ||
+      ((filter.payPal ?? false) &&
+        transaction.paymentMethod === PaymentMethod.PayPal) ||
+      ((filter.pix ?? false) &&
+        transaction.paymentMethod === PaymentMethod.Pix) ||
+      ((filter.cash ?? false) &&
+        transaction.paymentMethod === PaymentMethod.Cash)
+    );
+  };
+
+  const matchesCurrency = (transaction: Transaction): boolean => {
+    return !filter.currency || transaction.currency.includes(filter.currency);
+  };
+
+  const matchesUserName = (transaction: Transaction): boolean => {
+    return (
+      !filter.userName || transaction.customer.name.includes(filter.userName)
+    );
+  };
+
+  const matchesEmail = (transaction: Transaction): boolean => {
+    return (
+      !filter.emailAddress ||
+      transaction.customer.email.includes(filter.emailAddress)
+    );
+  };
+
+  return transactions.filter((transaction) => {
+    return (
+      matchesStatus(transaction) &&
+      matchesPaymentMethod(transaction) &&
+      matchesCurrency(transaction) &&
+      matchesUserName(transaction) &&
+      matchesEmail(transaction)
     );
   });
 };
 
-const TransactionBoard: React.FC = () => {
+const sortTransactions = (transactions: Transaction[], sort: Sort): Transaction[] => {
+  return [...transactions].sort((a, b) => {
+    // Handle date sorting if specified
+    if (sort.dateAsc !== undefined) {
+      const dateComparison: number = sort.dateAsc ? a.date.getTime() - b.date.getTime() : b.date.getTime() - a.date.getTime();
+      if (dateComparison !== 0) {
+        return dateComparison;
+      }
+    }
+
+    // Handle total sorting if specified
+    if (sort.totalAsc !== undefined) {
+      return sort.totalAsc ? a.totalAmount - b.totalAmount : b.totalAmount - a.totalAmount;
+    }
+
+    return 0; // Default case if no sorting criteria is met
+  });
+};
+
+
+interface PurchaseListProps {
+  purchases: Transaction[];
+}
+
+const TransactionBoard: React.FC<PurchaseListProps> = ({ purchases }) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [page, setPage] = useState(0);
   const [totalTransactions, setTotalTransactions] = useState(0);
   const [filter, setFilter] = useState<Filter>({});
+  const [sort, setSort] = useState<Sort>({});
 
   const itemsPerPage = 5;
 
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   const getTransactions = useCallback(
-    async (startIndex: number, count: number) => {
+    async (startIndex: number, count: number): Promise<Transaction[]> => {
       try {
-        const response = await fetch("transactions.json");
-        const json = await response.json();
-        const mappedTransactions = json.map(mapJsonToTransaction);
-        const filteredTransactions = filterTransactions(
-          mappedTransactions,
-          filter
-        );
+        const filteredTransactions = sortTransactions(filterTransactions(purchases, filter), sort);
 
         setTotalTransactions(filteredTransactions.length);
 
@@ -162,7 +132,7 @@ const TransactionBoard: React.FC = () => {
         return [];
       }
     },
-    [filter]
+    [purchases, filter, sort]
   );
 
   useEffect(() => {
@@ -179,10 +149,6 @@ const TransactionBoard: React.FC = () => {
 
   const lastPage = Math.max(Math.ceil(totalTransactions / itemsPerPage) - 1, 0);
 
-  const handleFilterChange = (filter: Filter) => {
-    setFilter(filter);
-  };
-
   return (
     <Box display="flex" justifyContent="center" p={4}>
       <Card
@@ -194,10 +160,7 @@ const TransactionBoard: React.FC = () => {
         w={isMobile ? "100vw" : "80vw"}
       >
         <FormControl>
-          <Filters
-            handleFilterChange={handleFilterChange}
-            filter={filter}
-          ></Filters>
+          <Filters handleFilterChange={setFilter} filter={filter}></Filters>
         </FormControl>
         <Box position="relative" padding={isMobile ? "5" : "10"}>
           <Divider />
@@ -206,53 +169,13 @@ const TransactionBoard: React.FC = () => {
           </AbsoluteCenter>
         </Box>
         <Box flex="1" overflowY="auto">
-          <Purchases purchases={transactions}></Purchases>
+          <Purchases purchases={transactions} handleSort={setSort} sort={sort}></Purchases>
         </Box>
-        <Box display="flex" justifyContent="center">
-          <Stack direction="row" spacing={isMobile ? 2 : 10} align="center">
-            <Button
-              size={isMobile ? "xs" : "sm"}
-              onClick={() => setPage(0)}
-              disabled={page === 0}
-              colorScheme="blue"
-              w={isMobile ? 50 : 100}
-            >
-              <RxDoubleArrowLeft />
-              {!isMobile && <Text pl={2}>First</Text>}
-            </Button>
-            <Button
-              size={isMobile ? "xs" : "sm"}
-              onClick={() => setPage(page === 0 ? 0 : page - 1)}
-              disabled={page === 0}
-              variant={page === 0 ? "outline" : "solid"}
-              colorScheme={page === 0 ? "" : "blue"}
-              w={isMobile ? 50 : 100}
-            >
-              <RxChevronLeft />
-              {!isMobile && <Text pl={2}>First</Text>}
-            </Button>
-            <Button
-              size={isMobile ? "xs" : "sm"}
-              onClick={() => setPage(page === lastPage ? lastPage : page + 1)}
-              colorScheme={page === lastPage ? "" : "blue"}
-              disabled={page === lastPage}
-              variant={page === lastPage ? "outline" : "solid"}
-              w={isMobile ? 50 : 100}
-            >
-              {!isMobile && <Text pr={2}>Next</Text>}
-              <RxChevronRight />
-            </Button>
-            <Button
-              size={isMobile ? "xs" : "sm"}
-              onClick={() => setPage(lastPage)}
-              colorScheme="blue"
-              w={isMobile ? 50 : 100}
-            >
-              {!isMobile && <Text pr={2}>Last</Text>}
-              <RxDoubleArrowRight />
-            </Button>
-          </Stack>
-        </Box>
+        <PageButtons
+          page={page}
+          lastPage={lastPage}
+          handleSetPage={setPage}
+        ></PageButtons>
       </Card>
     </Box>
   );

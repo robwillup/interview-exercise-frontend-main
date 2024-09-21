@@ -13,7 +13,7 @@ import {
   Tr,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import { Transaction } from "./Types";
+import { Sort, Transaction } from "./Types";
 import Products from "./Products";
 import { useState } from "react";
 import CustomerInfo from "./Customer";
@@ -22,9 +22,11 @@ import PaymentMethodIcon from "./PaymentMethodIcon";
 
 interface PurchasesProps {
   purchases: Transaction[];
+  sort: Sort;
+  handleSort: React.Dispatch<React.SetStateAction<Sort>>;
 }
 
-const Purchases: React.FC<PurchasesProps> = ({ purchases }) => {
+const Purchases: React.FC<PurchasesProps> = ({ purchases, handleSort, sort }) => {
   const [openRow, setOpenRow] = useState<number | null>(null);
 
   const isMobile = useBreakpointValue({ base: true, md: false });
@@ -37,6 +39,24 @@ const Purchases: React.FC<PurchasesProps> = ({ purchases }) => {
 
   const toggleRow = (index: number) => {
     setOpenRow(openRow === index ? null : index);
+  };
+
+  const handleDateSort = () => {
+    const updatedSort = {
+      ...sort,
+      dateAsc: !sort.dateAsc
+    };
+
+    handleSort(updatedSort);
+  };
+
+  const handleTotalSort = () => {
+    const updatedSort = {
+      ...sort,
+      totalAsc: !sort.totalAsc
+    };
+
+    handleSort(updatedSort);
   };
 
   return (
@@ -109,8 +129,8 @@ const Purchases: React.FC<PurchasesProps> = ({ purchases }) => {
           <Table size={isMobile ? "sm" : "md"}>
             <Thead>
               <Tr>
-                <Th>Purchased On</Th>
-                <Th>Total</Th>
+                <Th onClick={() => handleDateSort()}>Purchased On</Th>
+                <Th onClick={() => handleTotalSort()}>Total</Th>
                 <Th>Payment Method</Th>
                 <Th>Customer</Th>
               </Tr>
