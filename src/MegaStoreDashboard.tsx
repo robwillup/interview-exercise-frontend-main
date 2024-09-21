@@ -10,6 +10,7 @@ import {
   Stack,
   Text,
   Flex,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import TransactionBoard from "./TransactionBoard";
 import { useState } from "react";
@@ -19,6 +20,7 @@ const MegaStoreDashboard: React.FC = () => {
   const [isHome, setIsHome] = useState(true);
   const [isList, setIsList] = useState(false);
   const [isStats, setIsStats] = useState(false);
+  const [isMobile] = useMediaQuery("(max-width: 768px)");
 
   const handleGoList = () => {
     setIsHome(false);
@@ -35,7 +37,7 @@ const MegaStoreDashboard: React.FC = () => {
   return (
     <>
       {isHome && (
-        <Flex>
+        <Flex direction={isMobile ? "column" : "row"} gap={4}>
           <Card maxW="xl">
             <CardBody>
               <Image
@@ -44,14 +46,22 @@ const MegaStoreDashboard: React.FC = () => {
                 borderRadius="lg"
               />
               <Stack mt="6" spacing="3">
-                <Heading size="md">Transaction Stats</Heading>
-                <Text>View and analyze transaction data statistics</Text>
+                <Heading size="md">Purchase Insights</Heading>
+                <Text fontSize={20}>
+                  Explore detailed statistics and trends from recent
+                  transactions to gain valuable insights into customer behavior
+                  and sales performance.
+                </Text>
               </Stack>
             </CardBody>
             <Divider />
             <CardFooter>
               <ButtonGroup spacing="2" pl={200}>
-                <Button onClick={handleGoStats} variant="solid" colorScheme="blue">
+                <Button
+                  onClick={handleGoStats}
+                  variant="solid"
+                  colorScheme="blue"
+                >
                   Go to Statistics
                 </Button>
               </ButtonGroup>
@@ -65,10 +75,10 @@ const MegaStoreDashboard: React.FC = () => {
                 borderRadius="lg"
               />
               <Stack mt="6" spacing="3">
-                <Heading size="md">Transaction List</Heading>
-                <Text>
-                  View a list of transactions with different filtering and
-                  ordering options
+                <Heading size="md">Purchase Overview</Heading>
+                <Text fontSize={20}>
+                  Browse through all transactions with flexible filtering and
+                  sorting options to easily manage and review purchases.
                 </Text>
               </Stack>
             </CardBody>
