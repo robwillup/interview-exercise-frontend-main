@@ -135,7 +135,7 @@ const filterTransactions = (
   });
 };
 
-const TransactionBoard: React.FC = () => {
+const TransactionStats: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [page, setPage] = useState(0);
   const [totalTransactions, setTotalTransactions] = useState(0);
@@ -194,69 +194,10 @@ const TransactionBoard: React.FC = () => {
         overflow="hidden"
         w={isMobile ? "100vw" : "80vw"}
       >
-        <FormControl>
-          <Filters
-            handleFilterChange={handleFilterChange}
-            filter={filter}
-          ></Filters>
-        </FormControl>
-        <Box position="relative" padding={isMobile ? "5" : "10"}>
-          <Divider />
-          <AbsoluteCenter bg="white">
-            {totalTransactions} Transactions
-          </AbsoluteCenter>
-        </Box>
-        <Box flex="1" overflowY="auto">
-          <Purchases purchases={transactions}></Purchases>
-        </Box>
-        <Box display="flex" justifyContent="center">
-          <Stack direction="row" spacing={isMobile ? 2 : 10} align="center">
-            <Button
-              size={isMobile ? "xs" : "sm"}
-              onClick={() => setPage(0)}
-              disabled={page === 0}
-              colorScheme="blue"
-              w={isMobile ? 50 : 100}
-            >
-              <RxDoubleArrowLeft />
-              {!isMobile && <Text pl={2}>First</Text>}
-            </Button>
-            <Button
-              size={isMobile ? "xs" : "sm"}
-              onClick={() => setPage(page === 0 ? 0 : page - 1)}
-              disabled={page === 0}
-              variant={page === 0 ? "outline" : "solid"}
-              colorScheme={page === 0 ? "" : "blue"}
-              w={isMobile ? 50 : 100}
-            >
-              <RxChevronLeft />
-              {!isMobile && <Text pl={2}>First</Text>}
-            </Button>
-            <Button
-              size={isMobile ? "xs" : "sm"}
-              onClick={() => setPage(page === lastPage ? lastPage : page + 1)}
-              colorScheme={page === lastPage ? "" : "blue"}
-              disabled={page === lastPage}
-              variant={page === lastPage ? "outline" : "solid"}
-              w={isMobile ? 50 : 100}
-            >
-              {!isMobile && <Text pr={2}>Next</Text>}
-              <RxChevronRight />
-            </Button>
-            <Button
-              size={isMobile ? "xs" : "sm"}
-              onClick={() => setPage(lastPage)}
-              colorScheme="blue"
-              w={isMobile ? 50 : 100}
-            >
-              {!isMobile && <Text pr={2}>Last</Text>}
-              <RxDoubleArrowRight />
-            </Button>
-          </Stack>
-        </Box>
+        <Stats data={transactions}></Stats>
       </Card>
     </Box>
   );
 };
 
-export default TransactionBoard;
+export default TransactionStats;

@@ -1,11 +1,11 @@
 import './App.css';
-import TransactionBoard from './TransactionBoard';
+import MegaStoreDashboard from './MegaStoreDashboard';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <TransactionBoard></TransactionBoard>
+        <MegaStoreDashboard />
       </header>
     </div>
   );
