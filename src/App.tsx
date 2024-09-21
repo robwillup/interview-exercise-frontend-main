@@ -1,5 +1,5 @@
 import './App.css';
-import MegaStoreDashboard from './MegaStoreDashboard';
+import MegaStoreDashboard from './Home';
 
 function App() {
   return (
