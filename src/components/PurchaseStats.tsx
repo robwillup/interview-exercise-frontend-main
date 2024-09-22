@@ -1,5 +1,5 @@
 import { Transaction } from "../types/Types";
-import { Box, Card, Flex, useBreakpointValue } from "@chakra-ui/react";
+import { Card, Flex, useBreakpointValue } from "@chakra-ui/react";
 import PieStats from "./PieStats";
 import BarStats from "./BarStats";
 

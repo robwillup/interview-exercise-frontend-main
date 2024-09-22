@@ -2,7 +2,6 @@ import { Status, Transaction } from "../types/Types";
 import {
   Tooltip,
   Legend,
-  ResponsiveContainer,
   BarChart,
   Bar,
   CartesianGrid,
