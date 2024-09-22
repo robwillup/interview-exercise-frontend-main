@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import { Filter, PaymentMethod, Sort, Status, Transaction } from "../types/Types";
+import {
+  Filter,
+  PaymentMethod,
+  Sort,
+  Status,
+  Transaction,
+} from "../types/Types";
 import {
   AbsoluteCenter,
   Box,
@@ -11,6 +17,7 @@ import {
 import Purchases from "./Purchases";
 import Filters from "./Filters";
 import PageButtons from "./PageButtons";
+import SortBar from "./SortBar";
 
 const filterTransactions = (
   transactions: Transaction[],
@@ -168,6 +175,7 @@ const PurchaseOverview: React.FC<PurchaseListProps> = ({ purchases }) => {
       >
         <FormControl>
           <Filters handleFilterChange={setFilter} filter={filter}></Filters>
+          {isMobile && <SortBar handleSort={setSort} sort={sort} />}
         </FormControl>
         <Box position="relative" padding={isMobile ? "5" : "10"}>
           <Divider />
