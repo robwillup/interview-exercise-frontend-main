@@ -1,5 +1,5 @@
 import { Tooltip } from "@chakra-ui/react";
-import { PaymentMethod } from "./Types";
+import { PaymentMethod } from "../types/Types";
 import { BsBank2, BsCashCoin, BsCreditCard, BsPaypal } from "react-icons/bs";
 import { RxCircleBackslash } from "react-icons/rx";
 import { SiPix } from "react-icons/si";

@@ -13,7 +13,7 @@ import {
   Tr,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import { Sort, Status, Transaction } from "./Types";
+import { Sort, Status, Transaction } from "../types/Types";
 import Products from "./Products";
 import { useState } from "react";
 import CustomerInfo from "./Customer";

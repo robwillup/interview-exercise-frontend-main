@@ -13,7 +13,7 @@ import {
   Stack,
   useMediaQuery,
 } from "@chakra-ui/react";
-import { Filter, PaymentMethod, Status } from "./Types";
+import { Filter, PaymentMethod, Status } from "../types/Types";
 import { useState } from "react";
 import { BsCashCoin } from "react-icons/bs";
 import { CiUser } from "react-icons/ci";

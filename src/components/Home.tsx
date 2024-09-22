@@ -15,10 +15,10 @@ import {
   BreadcrumbLink,
   Box,
 } from "@chakra-ui/react";
-import TransactionBoard from "./TransactionBoard";
 import { useCallback, useEffect, useState } from "react";
-import TransactionStats from "./TransactionStats";
-import { Transaction } from "./Types";
+import { Transaction } from "../types/Types";
+import PurchaseOverview from "./PurchaseOverview";
+import PurchaseStats from "./PurchaseStats";
 
 const mapJsonToTransaction = (data: any): Transaction => {
   return {
@@ -179,10 +179,10 @@ const Home: React.FC = () => {
         </Flex>
       )}
       {breadCrumbs.length > 1 && breadCrumbs[1] === "Overview" && (
-        <TransactionBoard purchases={transactions} />
+        <PurchaseOverview purchases={transactions} />
       )}
       {breadCrumbs.length > 1 && breadCrumbs[1] === "Stats" && (
-        <TransactionStats purchases={transactions} />
+        <PurchaseStats purchases={transactions} />
       )}
     </Flex>
   );

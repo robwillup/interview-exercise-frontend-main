@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Filter, PaymentMethod, Sort, Status, Transaction } from "./Types";
+import { Filter, PaymentMethod, Sort, Status, Transaction } from "../types/Types";
 import {
   AbsoluteCenter,
   Box,
@@ -113,7 +113,7 @@ interface PurchaseListProps {
   purchases: Transaction[];
 }
 
-const TransactionBoard: React.FC<PurchaseListProps> = ({ purchases }) => {
+const PurchaseOverview: React.FC<PurchaseListProps> = ({ purchases }) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [page, setPage] = useState(0);
   const [totalTransactions, setTotalTransactions] = useState(0);
@@ -192,4 +192,4 @@ const TransactionBoard: React.FC<PurchaseListProps> = ({ purchases }) => {
   );
 };
 
-export default TransactionBoard;
+export default PurchaseOverview;

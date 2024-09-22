@@ -10,7 +10,7 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { Customer } from "./Types";
+import { Customer } from "../types/Types";
 import { GoInfo } from "react-icons/go";
 
 interface CustomerInfoProps {

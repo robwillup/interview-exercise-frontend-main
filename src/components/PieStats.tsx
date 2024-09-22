@@ -1,14 +1,13 @@
-import { Transaction } from "./Types";
+import { Transaction } from "../types/Types";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
-interface FiltersProps {
+interface PieStatsProps {
   data: Transaction[];
 }
 
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-
-const Stats: React.FC<FiltersProps> = ({ data }) => {
+const PieStats: React.FC<PieStatsProps> = ({ data }) => {
   const paymentMethods: { [key: string]: number } = {};
 
   data.forEach((transaction) => {
@@ -20,10 +19,9 @@ const Stats: React.FC<FiltersProps> = ({ data }) => {
     }
   });
 
-  // Prepare the data for the pie chart
   const chartData = Object.keys(paymentMethods).map((method) => ({
     name: method,
-    value: paymentMethods[method]
+    value: paymentMethods[method],
   }));
 
   return (
@@ -48,4 +46,4 @@ const Stats: React.FC<FiltersProps> = ({ data }) => {
   );
 };
 
-export default Stats;
+export default PieStats;

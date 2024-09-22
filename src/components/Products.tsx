@@ -11,7 +11,7 @@ import {
   Text,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import { Product } from "./Types";
+import { Product } from "../types/Types";
 
 export interface ProductsProps {
   products: Product[];
