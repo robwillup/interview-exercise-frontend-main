@@ -5,7 +5,7 @@ interface PieStatsProps {
   data: Transaction[];
 }
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#9078CF"];
 
 const PieStats: React.FC<PieStatsProps> = ({ data }) => {
   const paymentMethods: { [key: string]: number } = {};
@@ -32,7 +32,7 @@ const PieStats: React.FC<PieStatsProps> = ({ data }) => {
         nameKey="name"
         cx="50%"
         cy="50%"
-        outerRadius={150}
+        outerRadius={100}
         fill="#8884d8"
         label
       >

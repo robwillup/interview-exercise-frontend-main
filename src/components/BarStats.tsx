@@ -61,9 +61,8 @@ const BarStats: React.FC<BarStatsProps> = ({ data }) => {
   });
 
   return (
-    <ResponsiveContainer height="100%">
       <BarChart
-        height={300}
+        width={400} height={400}
         data={Object.values(statusByPaymentMethods)}
         margin={{
           top: 5,
@@ -93,7 +92,6 @@ const BarStats: React.FC<BarStatsProps> = ({ data }) => {
           activeBar={<Rectangle fill="gold" stroke="purple" />}
         />
       </BarChart>
-    </ResponsiveContainer>
   );
 };
 

@@ -1,5 +1,5 @@
 import { Transaction } from "../types/Types";
-import { Box, Card, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Card, Flex, useBreakpointValue } from "@chakra-ui/react";
 import PieStats from "./PieStats";
 import BarStats from "./BarStats";
 
@@ -11,26 +11,14 @@ const PurchaseStats: React.FC<PurchaseStatsProps> = ({ purchases }) => {
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   return (
-    <Box display="flex" justifyContent="center" p={4}>
-      <Card
-        p={isMobile ? "5" : "10"}
-        h="90vh"
-        display="flex"
-        flexDirection="column"
-        w={isMobile ? "100vw" : "40vw"}
-      >
+    <Flex direction={isMobile ? "column" : "row"} gap={4} pt={4}>
+      <Card maxW="lg">
         <PieStats data={purchases}></PieStats>
       </Card>
-      <Card
-        p={isMobile ? "5" : "10"}
-        h="90vh"
-        display="flex"
-        flexDirection="column"
-        w={isMobile ? "100vw" : "40vw"}
-      >
+      <Card maxW="lg" >
         <BarStats data={purchases}></BarStats>
       </Card>
-    </Box>
+    </Flex>
   );
 };
 
