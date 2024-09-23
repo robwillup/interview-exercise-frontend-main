@@ -30,6 +30,10 @@ const Filters: React.FC<FiltersProps> = ({ handleFilterChange, filter }) => {
   const [emailAddress, setEmailAddress] = useState("");
   const [isMobile] = useMediaQuery("(max-width: 768px)");
 
+  const sanitizeInput = (input: string) => {
+    return input.replace(/[<>]/g, '');
+  };
+
   const handleStatusCheckBoxChange = (status: Status) => {
     const updatedFilter = {
       ...filter,
@@ -69,7 +73,7 @@ const Filters: React.FC<FiltersProps> = ({ handleFilterChange, filter }) => {
   };
 
   const handleCurrencyChange = (currency: string) => {
-    setCurrency(currency);
+    setCurrency(sanitizeInput(currency));
     const updatedFilter = {
       ...filter,
       currency: currency,
@@ -79,7 +83,7 @@ const Filters: React.FC<FiltersProps> = ({ handleFilterChange, filter }) => {
   };
 
   const handleNameChange = (name: string) => {
-    setUserName(name);
+    setUserName(sanitizeInput(name));
     const updatedFilter = {
       ...filter,
       userName: name,
@@ -89,7 +93,7 @@ const Filters: React.FC<FiltersProps> = ({ handleFilterChange, filter }) => {
   };
 
   const handleEmailChange = (email: string) => {
-    setEmailAddress(email);
+    setEmailAddress(sanitizeInput(email));
     const updatedFilter = {
       ...filter,
       emailAddress: email,
