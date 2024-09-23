@@ -46,14 +46,28 @@ Unit testing is done using Vitest.
 
 ### Main Features
 
----
+* Filtering
+* Sorting
+* UX
 
 ### Challenges
+
+* Design
+* Vitest
 
 ---
 
 ### Time constraints
 
+* Reduced filter and sorting options
+* Simpler design
+* No routes
+
 ---
 
 ### Improvements
+
+* Refactoring
+* More filter and sorting options
+* Improved styling
+* Visual identity
