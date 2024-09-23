@@ -12,10 +12,21 @@ const PurchaseStats: React.FC<PurchaseStatsProps> = ({ purchases }) => {
 
   return (
     <Flex direction={isMobile ? "column" : "row"} gap={4} pt={4}>
-      <Card maxW="lg">
+      <Card
+        p={isMobile ? 10 : 100}
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        fontSize={18}
+      >
         <PieStats data={purchases}></PieStats>
       </Card>
-      <Card maxW="lg" >
+      <Card
+      p={isMobile ? 10 : 100}
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      fontSize={18}>
         <BarStats data={purchases}></BarStats>
       </Card>
     </Flex>
