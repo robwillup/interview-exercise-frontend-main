@@ -1,13 +1,4 @@
 import {
-  Button,
-  ButtonGroup,
-  Card,
-  CardBody,
-  CardFooter,
-  Image,
-  Heading,
-  Stack,
-  Text,
   Flex,
   useMediaQuery,
   Breadcrumb,
@@ -19,6 +10,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Transaction } from "../types/Types";
 import PurchaseOverview from "./PurchaseOverview";
 import PurchaseStats from "./PurchaseStats";
+import HomeCard from "./HomeCard";
 
 const mapJsonToTransaction = (data: any): Transaction => {
   return {
@@ -77,18 +69,6 @@ const Home: React.FC = () => {
     setBreadCrumbs(["Home", "Stats"]);
   };
 
-  const handleCardGoStats = () => {
-    if (isMobile) {
-      handleGoStats();
-    }
-  };
-
-  const handleCardGoList = () => {
-    if (isMobile) {
-      handleGoList();
-    }
-  };
-
   const handleBreadcrumbClick = (index: number) => {
     const newBreadCrumbs = breadCrumbs.slice(0, index + 1);
     setBreadCrumbs(newBreadCrumbs);
@@ -116,66 +96,16 @@ const Home: React.FC = () => {
 
       {breadCrumbs.length === 1 && (
         <Flex direction={isMobile ? "column" : "row"} gap={4} pt={4}>
-          <Card maxW="xl" onClick={isMobile ? handleCardGoStats : undefined}>
-            <CardBody>
-              <Image
-                src="https://images.unsplash.com/photo-1666875753105-c63a6f3bdc86?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                alt="Transaction Stats"
-                borderRadius="lg"
-              />
-              <Stack mt="6" spacing="3">
-                <Heading size="md">Purchase Insights</Heading>
-                <Text fontSize={20} noOfLines={2}>
-                  Explore detailed statistics and trends from recent
-                  transactions to gain valuable insights into customer behavior
-                  and sales performance.
-                </Text>
-              </Stack>
-            </CardBody>
-            {!isMobile && (
-              <CardFooter justifyContent="center">
-                <ButtonGroup spacing="2">
-                  <Button
-                    onClick={handleGoStats}
-                    variant="solid"
-                    colorScheme="blue"
-                  >
-                    Go to Statistics
-                  </Button>
-                </ButtonGroup>
-              </CardFooter>
-            )}
-          </Card>
-
-          <Card maxW="xl" onClick={isMobile ? handleCardGoList : undefined}>
-            <CardBody>
-              <Image
-                src="https://images.unsplash.com/photo-1616077167555-51f6bc516dfa?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                alt="Transaction List"
-                borderRadius="lg"
-              />
-              <Stack mt="6" spacing="3">
-                <Heading size="md">Purchase Overview</Heading>
-                <Text fontSize={20} noOfLines={2}>
-                  Browse through all transactions with flexible filtering and
-                  sorting options to easily manage and review purchases.
-                </Text>
-              </Stack>
-            </CardBody>
-            {!isMobile && (
-              <CardFooter justifyContent="center">
-                <ButtonGroup spacing="2">
-                  <Button
-                    onClick={handleGoList}
-                    variant="solid"
-                    colorScheme="blue"
-                  >
-                    Go to List
-                  </Button>
-                </ButtonGroup>
-              </CardFooter>
-            )}
-          </Card>
+          <HomeCard
+            isMobile={isMobile}
+            onNavigation={handleGoStats}
+            isStats={true}
+          />
+          <HomeCard
+            isMobile={isMobile}
+            onNavigation={handleGoList}
+            isStats={false}
+          />
         </Flex>
       )}
       {breadCrumbs.length > 1 && breadCrumbs[1] === "Overview" && (
