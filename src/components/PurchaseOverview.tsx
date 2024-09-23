@@ -65,7 +65,7 @@ const filterTransactions = (
   };
 
   const matchesCurrency = (transaction: Transaction): boolean => {
-    return !filter.currency || transaction.currency.includes(filter.currency);
+    return !filter.currency || transaction.currency.includes(filter.currency.toUpperCase());
   };
 
   const matchesUserName = (transaction: Transaction): boolean => {
@@ -77,7 +77,7 @@ const filterTransactions = (
   const matchesEmail = (transaction: Transaction): boolean => {
     return (
       !filter.emailAddress ||
-      transaction.customer.email.includes(filter.emailAddress)
+      transaction.customer.email.includes(filter.emailAddress.toLowerCase())
     );
   };
 

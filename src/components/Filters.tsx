@@ -31,7 +31,13 @@ const Filters: React.FC<FiltersProps> = ({ handleFilterChange, filter }) => {
   const [isMobile] = useMediaQuery("(max-width: 768px)");
 
   const sanitizeInput = (input: string) => {
-    return input.replace(/[<>]/g, '');
+    return input
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;")
+      .replace(/\//g, "&#x2F;");
   };
 
   const handleStatusCheckBoxChange = (status: Status) => {
